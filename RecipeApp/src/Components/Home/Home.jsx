@@ -15,9 +15,9 @@ function Home() {
         <h1 className="text-4xl font-poppins font-semibold my-8">
           Recommended Recipes
         </h1>
+      
         <RecipeList startId={52863} endId={52870} />
-
-        {/* Load component */}
+        
         <div className="mt-10">
           <Load name={"Load More"} />
         </div>

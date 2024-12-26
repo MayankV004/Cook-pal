@@ -1,41 +1,31 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Card from "./Card"; // Import your Card component
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRecipes } from '../../store/recipesSlice';
+import Card from './Card';
 
-const RecipeList = ({ startId, endId }) => {
-  const [recipes, setRecipes] = useState([]);
-
+function RecipeList({ startId, endId }) {
+  const dispatch = useDispatch();
+  const { items, status, error } = useSelector(state => state.recipes);
+  
   useEffect(() => {
-    const fetchRecipes = async () => {
-      const ids = Array.from(
-        { length: endId - startId + 1 },
-        (_, index) => startId + index
-      );
+    dispatch(fetchRecipes({ startId, endId }));
+  }, [dispatch, startId, endId]);
 
-      try {
-        const recipePromises = ids.map((id) =>
-          axios.get(
-            `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
-          )
-        );
-        const responses = await Promise.all(recipePromises);
-        const recipeData = responses.map((response) => response.data.meals[0]); // Extract recipes
-        setRecipes(recipeData);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      }
-    };
+  if (status === 'loading' && items.length === 0) {
+    return <div className="text-center mt-4">Loading recipes...</div>;
+  }
 
-    fetchRecipes();
-  }, [startId, endId]);
+  if (status === 'failed') {
+    return <div className="text-center mt-4 text-red-500">Error: {error}</div>;
+  }
 
   return (
-    <div className="w-full flex flex-wrap justify-center gap-10">
-      {recipes.map((recipe) => (
+    <div className="flex flex-wrap justify-center gap-4">
+      {items.map(recipe => (
         <Card key={recipe.idMeal} recipe={recipe} />
       ))}
     </div>
   );
-};
+}
 
 export default RecipeList;

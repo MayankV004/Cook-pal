@@ -9,21 +9,26 @@ import Home from './Components/Home/Home.jsx'
 import Explore from './Components/Explore/Explore.jsx'
 import Help from './Components/Help/Help.jsx'
 import SearchRecipe from './Components/Header/SearchRecipe.jsx'
+import RecipeDetail from './Components/Home/RecipeDetail.jsx'
+import { Provider } from 'react-redux'
+import { store } from './store'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Root />}>
-        <Route path='' element={<Home/>}/>
-        <Route path='explore' element={<Explore/>}/>
-        <Route path='help' element={<Help/>}/>
-        <Route path='searchRecipe' element={<SearchRecipe/>}/>
+      <Route path='' element={<Home/>}/>
+      <Route path='explore' element={<Explore/>}/>
+      <Route path='help' element={<Help/>}/>
+      <Route path='searchRecipe' element={<SearchRecipe/>}/>
+      <Route path="recipe/:id" element={<RecipeDetail />} />
     </Route>
   )
 )
 
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-   <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </StrictMode>,
 )
