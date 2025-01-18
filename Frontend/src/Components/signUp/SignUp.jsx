@@ -47,7 +47,7 @@ function SignUp() {
             placeholder="password"
             onChange={(e)=> setPassword(e.target.value)}
           />
-          <input className="w-full px-3 py-2 border-2 bg-[#509E2F] text-white rounded-md" type="submit" value="Sign Up" />
+          <input className="w-full px-3 py-2 border-2 bg-[#509E2F] hover:bg-[#4a922b] cursor-pointer text-white rounded-md" type="submit" value="Sign Up" />
         </form>
         <div>
           <p className="text-center mt-4">

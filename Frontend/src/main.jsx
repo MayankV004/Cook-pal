@@ -25,6 +25,7 @@ const router = createBrowserRouter(
       <Route path='help' element={<Help/>}/>
       <Route path='searchRecipe' element={<SearchRecipe/>}/>
       <Route path="recipe/:id" element={<RecipeDetail />} />
+    
     </Route>
   )
 )

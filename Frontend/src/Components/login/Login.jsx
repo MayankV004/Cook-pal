@@ -7,26 +7,47 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e) => {
+  const [error, setError] = useState("");
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    axios.post("http://localhost:3001/login", { email, password })
-    .then((result) => {console.log(result); 
-      if(result.data === "Success")
+    setError("");
+    try{
+      const response = await axios.post("http://localhost:3001/login", { email, password } , {
+        headers : {
+          "Content-Type": "application/json",
+        },
+        withCredentials:true, // Important for cookies
+      });
+
+      if (response.data.message === "Login Successful")
       {
         navigate("/home");
       }
-      else
-      {
-        alert(result.data);
+      else {
+        setError(response.data.error || "Login failed")
+        alert(error)
       }
-    })
-    .catch((error) => console.error(error));
-    
+
+    }
+    catch(err){
+      if (error.response) {
+        // Server responded with an error
+        setError(error.response.data.error || "Login failed");
+      } else if (error.request) {
+        // Request was made but no response
+        setError("No response from server");
+      } else {
+        // Something else went wrong
+        setError("An error occurred");
+      }
+      console.error("Login error:", error);
+    }
+
   };
   return (
     <>
-      <div className="login w-full h-screen flex justify-center items-center">
-        <div className="border-[1px] border-zinc-400 rounded-md p-8 shrink-0 shadow-lg ">
+      <div className="login w-full h-screen flex justify-center items-center overflow-hidden">
+        <div className="border-[1px] border-zinc-400 rounded-md p-8 shrink-0 shadow-lg max-h-full overflow-auto">
           <div className="text-center mb-8">
             <h1> <span className="text-3xl font-light text-[#509E2F]">Login</span></h1>
           </div>
@@ -45,7 +66,7 @@ function Login() {
               placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <input className="w-full px-3 py-2 border-2 bg-[#509E2F] text-white rounded-md" type="submit" value="Login" />
+            <input className="w-full px-3 py-2 border-2 bg-[#509E2F] hover:bg-[#4a922b] cursor-pointer text-white rounded-md" type="submit" value="Login" />
           </form>
           <div>
             <p className="text-center mt-4">
